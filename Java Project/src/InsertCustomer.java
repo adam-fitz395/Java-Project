@@ -28,7 +28,7 @@ public class InsertCustomer
         
         catch(SQLException sqlException)
         {
-            sqlException.printStackTrace () ;
+            sqlException.printStackTrace();
         }
             
         finally 

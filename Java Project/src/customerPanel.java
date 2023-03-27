@@ -16,9 +16,10 @@ public class customerPanel
 
     // Buttons
     private static JButton okButton;
+    private static JButton custPanelButton;
     public static void main(String[] args) 
     {
-        // Create frame and panel
+        // Create Customer frame and panel
         JFrame custFrame = new JFrame("Insert Customer");
         JPanel custPanel = new JPanel();
         custFrame.setSize(400,300);
@@ -29,64 +30,77 @@ public class customerPanel
         
         // Add labels and panels
         custNameLabel = new JLabel("Name:");
-        custNameLabel.setBounds(10, 10, 75, 25);
+        custNameLabel.setBounds(10, 40, 75, 25);
         custPanel.add(custNameLabel);
 
         custNameTfield = new JTextField();
-        custNameTfield.setBounds(90, 10, 100, 25);
+        custNameTfield.setBounds(90, 40, 100, 25);
         custPanel.add(custNameTfield);
 
         custSurnameLabel = new JLabel("Surname:");
-        custSurnameLabel.setBounds(10, 40, 75, 25);
+        custSurnameLabel.setBounds(10, 70, 75, 25);
         custPanel.add(custSurnameLabel);
 
         custSurnameTfield = new JTextField();
-        custSurnameTfield.setBounds(90, 40, 100, 25);
+        custSurnameTfield.setBounds(90, 70, 100, 25);
         custPanel.add(custSurnameTfield);
 
         // Add buttons
+        // OK button
         okButton = new JButton("OK");
-        okButton.setBounds(10, 70, 60, 25);
+        okButton.setBounds(10, 100, 60, 25);
         okButton.addActionListener(new ActionListener () 
         {
             public void actionPerformed (ActionEvent e)
             {
                 boolean nameValid;
-                nameValid = nameCheck();
-                System.out.println(nameValid);
+                nameValid = nameCheck(custNameTfield, custSurnameTfield);
                 
                 if (nameValid == false)
                 {
-                    JOptionPane.showMessageDialog(null, "Invalid");
-                }
-
-                System.out.println(nameValid);
-
-                if(nameValid == true);
-                {
-                    JOptionPane.showMessageDialog(null,"Valid");
+                    JOptionPane.showMessageDialog(null, "Invalid Name or Surname");
                 }
             }
         });
         custPanel.add(okButton);
+
+        // Customer Panel Button
+        custPanelButton = new JButton("Customer");
+        custPanelButton.setBounds(10, 10, 100, 25);
+        custPanel.add(custPanelButton);
+
+        custPanelButton = new JButton("Invoice");
+        custPanelButton.setBounds(10, 10, 100, 25);
+        custPanel.add(custPanelButton);
+
     }
 
     // Method to check if name is valid
-    static boolean nameCheck()
+    static boolean nameCheck(JTextField nameField, JTextField surnameField)
     {
         String regex = "^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
         Pattern nameCheckPattern = Pattern.compile(regex);
         // Test first name
         String name = custNameTfield.getText();
-        if (name == null)
+        String surname = custSurnameTfield.getText();
+        if ((name == null || name.isEmpty() || surname == null || surname.isEmpty()))
         {
             return false;
         }
 
         else
         {
-        Matcher nameMatch = nameCheckPattern.matcher(name);
-        return nameMatch.matches();
+            Matcher nameMatch = nameCheckPattern.matcher(name);
+            Matcher surnameMatch = nameCheckPattern.matcher(surname);
+            if(nameMatch.matches() && surnameMatch.matches())
+            {
+                return true;
+            }
+        
+            else
+            {
+                return false;
+            }
         }
     }
 }
