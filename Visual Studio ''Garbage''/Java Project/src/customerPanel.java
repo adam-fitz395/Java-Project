@@ -53,7 +53,7 @@ public class customerPanel
         custPanel.add(custSurnameTfield);
         custSurnameTfield.setVisible(true);
 
-        custDOBLabel = new JLabel("DOB (YYYY-MM-DD):");
+        custDOBLabel = new JLabel("DOB:");
         custDOBLabel.setBounds(10, 100, 75, 25);
         custPanel.add(custDOBLabel);
         custDOBLabel.setVisible(true);
