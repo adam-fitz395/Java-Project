@@ -1,6 +1,7 @@
 package java_project_2023;
 
 import java.awt.EventQueue;
+import java.sql.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
+import net.miginfocom.swing.MigLayout;
 
 public class CustomerPanel extends JPanel 
 {
@@ -48,7 +50,6 @@ public class CustomerPanel extends JPanel
 	 */
 	public CustomerPanel() 
 	{
-		setLayout(null);
 		
 		JButton addCustomerButton = new JButton("Add Customer");
 		addCustomerButton.addActionListener(new ActionListener() 
@@ -63,8 +64,8 @@ public class CustomerPanel extends JPanel
 				mainFrame.repaint();
 			}
 		});
-		addCustomerButton.setBounds(10, 11, 118, 23);
-		add(addCustomerButton);
+		setLayout(new MigLayout("", "[61px][][]", "[23px][20px][20px][][20px]"));
+		add(addCustomerButton, "cell 0 0,growx,aligny top");
 		
 		JButton receiveInvButton = new JButton("Receive Invoice");
 		receiveInvButton.addActionListener(new ActionListener() 
@@ -79,38 +80,45 @@ public class CustomerPanel extends JPanel
 				mainFrame.repaint();
 			}
 		});
-		receiveInvButton.setBounds(134, 11, 130, 23);
-		add(receiveInvButton);
+		add(receiveInvButton, "cell 1 0,growx,aligny top");
 		
-		custNameTfield = new JTextField();
-		custNameTfield.setBounds(76, 45, 86, 20);
-		add(custNameTfield);
-		custNameTfield.setColumns(10);
+		JButton updateSupplierButton = new JButton("Update Supplier");
+		updateSupplierButton.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				SupplierPanel supplierPanel = new SupplierPanel();
+				JFrame mainFrame = (JFrame) getTopLevelAncestor();
+				mainFrame.getContentPane().removeAll();
+				mainFrame.getContentPane().add(supplierPanel);
+				mainFrame.revalidate();
+				mainFrame.repaint();
+			}
+		});
+		add(updateSupplierButton, "cell 2 0");
 		
 		JLabel custNameLabel = new JLabel("Name:");
-		custNameLabel.setBounds(10, 45, 61, 14);
-		add(custNameLabel);
+		add(custNameLabel, "cell 0 1");
 		
-		custSurnameTfield = new JTextField();
-		custSurnameTfield.setBounds(76, 76, 86, 20);
-		add(custSurnameTfield);
-		custSurnameTfield.setColumns(10);
+		custNameTfield = new JTextField();
+		add(custNameTfield, "cell 1 1");
+		custNameTfield.setColumns(10);
 		
 		JLabel custSurnameLabel = new JLabel("Surname:");
-		custSurnameLabel.setBounds(10, 79, 61, 14);
-		add(custSurnameLabel);
+		add(custSurnameLabel, "cell 0 2");
 		
-		custDOBTfield = new JTextField();
-		custDOBTfield.setBounds(76, 107, 86, 20);
-		add(custDOBTfield);
-		custDOBTfield.setColumns(10);
+		custSurnameTfield = new JTextField();
+		add(custSurnameTfield, "cell 1 2");
+		custSurnameTfield.setColumns(10);
 		
 		JLabel custDOBLabel = new JLabel("DOB:");
-		custDOBLabel.setBounds(10, 110, 61, 14);
-		add(custDOBLabel);
+		add(custDOBLabel, "cell 0 3");
+		
+		custDOBTfield = new JTextField();
+		add(custDOBTfield, "cell 1 3");
+		custDOBTfield.setColumns(10);
 		
 		JButton addButton = new JButton("Add");
-		addButton.setBounds(10, 138, 61, 23);
 		addButton.addActionListener(new ActionListener () 
         {
             public void actionPerformed (ActionEvent e)
@@ -130,13 +138,14 @@ public class CustomerPanel extends JPanel
                 	JOptionPane.showMessageDialog(null, "Invalid format for date of birth. Use format 'YYYY-MM-DD'.");
                 }
                 
-                else
+                if (nameValid == true && dobValid == true)
                 {
-                	// Insert DB insertion here
+                	customerInsertion(custNameTfield, custSurnameTfield, custDOBTfield);
+                	JOptionPane.showMessageDialog(null, "New customer has been added.");
                 }
             }
         });
-		add(addButton);
+		add(addButton, "cell 0 4");
 		
 		
 	
@@ -195,5 +204,49 @@ public class CustomerPanel extends JPanel
                 return false;
             }
         }
+    }
+    
+    public static void customerInsertion(JTextField custNameTfield, JTextField custSurnameTfield, JTextField custDOBTfield)
+    {	
+    	final String DATABASE_URL = "jdbc:mysql://localhost/customerdb";
+        Connection con = null ;
+        PreparedStatement pstat = null;
+        String firstname = custNameTfield.getText();
+        String surname = custSurnameTfield.getText();
+        String dobString = custDOBTfield.getText();
+        Date dob = java.sql.Date.valueOf(dobString);
+        int i=0;
+        try    
+        {       // establish connection to database
+            con = DriverManager.getConnection(DATABASE_URL, "root", "" );
+            // create Prepared Statement for inserting data into table
+            pstat = con.prepareStatement("INSERT INTO customer (firstName, surname, dob) VALUES (?,?,?)");
+            pstat.setString (1, firstname);
+            pstat.setString (2, surname);
+            pstat.setDate(3, dob);
+            // insert data into table
+            i = pstat .executeUpdate();
+            System.out. println ( i + " record successfully added to the table .");
+        
+        }    
+        
+        catch(SQLException sqlException)
+        {
+            sqlException.printStackTrace();
+        }
+            
+        finally 
+        {
+            try 
+            {
+                pstat.close () ;
+                con.close () ;
+            }
+            catch (Exception exception)
+            {
+                exception . printStackTrace () ;
+            }
+        }
+            
     }
 }
