@@ -45,9 +45,7 @@ public class CustomerPanel extends JPanel
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
+	// Create the Panel
 	public CustomerPanel() 
 	{
 		
@@ -206,9 +204,10 @@ public class CustomerPanel extends JPanel
         }
     }
     
+    // Connect to DB and insert customer details
     public static void customerInsertion(JTextField custNameTfield, JTextField custSurnameTfield, JTextField custDOBTfield)
     {	
-    	final String DATABASE_URL = "jdbc:mysql://localhost/customerdb";
+    	final String DATABASE_URL = "jdbc:mysql://localhost/projectdb";
         Connection con = null ;
         PreparedStatement pstat = null;
         String firstname = custNameTfield.getText();
