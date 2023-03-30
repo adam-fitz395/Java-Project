@@ -72,16 +72,16 @@ public class CustomerPanel extends JPanel
 			}
 		});
 		add(updateSupplierButton, "cell 2 0");
-		
-				JLabel custNameLabel = new JLabel("Name:");
-				add(custNameLabel, "cell 0 2");
-				
-						custNameTfield = new JTextField();
-						add(custNameTfield, "cell 1 2,growx");
-						custNameTfield.setColumns(10);
-		
-				JLabel custSurnameLabel = new JLabel("Surname:");
-				add(custSurnameLabel, "cell 0 3");
+
+		JLabel custNameLabel = new JLabel("Name:");
+		add(custNameLabel, "cell 0 2");
+
+		custNameTfield = new JTextField();
+		add(custNameTfield, "cell 1 2,growx");
+		custNameTfield.setColumns(10);
+
+		JLabel custSurnameLabel = new JLabel("Surname:");
+		add(custSurnameLabel, "cell 0 3");
 
 		JButton addButton = new JButton("Add");
 		addButton.addActionListener(new ActionListener()
@@ -110,17 +110,17 @@ public class CustomerPanel extends JPanel
 				}
 			}
 		});
-				
-						custSurnameTfield = new JTextField();
-						add(custSurnameTfield, "cell 1 3,growx");
-						custSurnameTfield.setColumns(10);
-		
-				JLabel custDOBLabel = new JLabel("DOB:");
-				add(custDOBLabel, "cell 0 4");
-		
-				custDOBTfield = new JTextField();
-				add(custDOBTfield, "cell 1 4,growx");
-				custDOBTfield.setColumns(10);
+
+		custSurnameTfield = new JTextField();
+		add(custSurnameTfield, "cell 1 3,growx");
+		custSurnameTfield.setColumns(10);
+
+		JLabel custDOBLabel = new JLabel("DOB:");
+		add(custDOBLabel, "cell 0 4");
+
+		custDOBTfield = new JTextField();
+		add(custDOBTfield, "cell 1 4,growx");
+		custDOBTfield.setColumns(10);
 		add(addButton, "cell 0 5");
 
 	}
@@ -184,7 +184,7 @@ public class CustomerPanel extends JPanel
 	public static void customerInsertion(JTextField custNameTfield, JTextField custSurnameTfield,
 			JTextField custDOBTfield)
 	{
-		final String DATABASE_URL = "jdbc:mysql://localhost/projectdb";
+		final String DATABASE_URL = "jdbc:mysql://localhost/customerdb";
 		Connection con = null;
 		PreparedStatement pstat = null;
 		String firstname = custNameTfield.getText();
@@ -217,8 +217,8 @@ public class CustomerPanel extends JPanel
 			{
 				pstat.close();
 				con.close();
-			} 
-			
+			}
+
 			catch (Exception exception)
 			{
 				exception.printStackTrace();

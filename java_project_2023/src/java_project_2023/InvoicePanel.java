@@ -134,7 +134,7 @@ public class InvoicePanel extends JPanel
 			// create Prepared Statement for inserting data into table
 			Statement pstat = con.createStatement();
 
-			ResultSet rs = pstat.executeQuery("SELECT invoiceID FROM invoice WHERE receivedFlag = 0");
+			ResultSet rs = pstat.executeQuery("SELECT invoiceID FROM invoice ORDER BY invoiceID");
 			while (rs.next())
 			{
 				String currentID = rs.getString("invoiceID");
@@ -177,9 +177,9 @@ public class InvoicePanel extends JPanel
 			String selectedIDString = invIDComboBox.getSelectedItem().toString();
 
 			// create Prepared Statement for inserting data into table
-			String query = "SELECT invoiceDate, itemName, supplierName, supplierAddress, supplierPhone FROM  invoice INNER JOIN supplier ON supplier.supplierID WHERE invoiceID = ? AND receivedFlag = 0";
+			String query = "SELECT invoiceDate, itemName, supplierName, supplierAddress, supplierPhone FROM  invoice INNER JOIN supplier ON supplier.supplierID WHERE invoiceID = ? AND invoice.supplierID = supplier.supplierID";
 			PreparedStatement pstat = con.prepareStatement(query);
-			pstat.setString(1, selectedIDString); // THIS IS EXTREMELY VULNERABLE TO SQL INJECTIONS
+			pstat.setString(1, selectedIDString);
 			ResultSet rs = pstat.executeQuery();
 
 			// insert data into jtable
@@ -198,7 +198,9 @@ public class InvoicePanel extends JPanel
 			try
 			{
 				con.close();
-			} catch (Exception exception)
+			}
+
+			catch (Exception exception)
 			{
 				exception.printStackTrace();
 			}
@@ -219,12 +221,12 @@ public class InvoicePanel extends JPanel
 			String selectedIDString = invIDComboBox.getSelectedItem().toString();
 
 			// create Prepared Statement for inserting data into table
-			String query = "UPDATE invoice SET receivedFlag = 1 WHERE invoiceID = ?";
+			String query = "DELETE FROM invoice WHERE invoiceID = ?";
 			PreparedStatement pstat = con.prepareStatement(query);
-			pstat.setString(1, selectedIDString); // THIS IS EXTREMELY VULNERABLE TO SQL INJECTIONS
+			pstat.setString(1, selectedIDString);
 			pstat.executeUpdate();
 
-			System.out.println("Updated receieved flag for " + selectedIDString + ".");
+			System.out.println("Deleted invoice " + selectedIDString + ".");
 
 		}
 
@@ -238,7 +240,9 @@ public class InvoicePanel extends JPanel
 			try
 			{
 				con.close();
-			} catch (Exception exception)
+			}
+
+			catch (Exception exception)
 			{
 				exception.printStackTrace();
 			}

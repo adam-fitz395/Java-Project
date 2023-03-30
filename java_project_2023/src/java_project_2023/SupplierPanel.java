@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,9 +23,9 @@ import javax.swing.JComboBox;
 public class SupplierPanel extends JPanel
 {
 	private static final long serialVersionUID = 19266060175986551L;
-	private JTextField suppNameTfield;
-	private JTextField suppAddressTfield;
-	private JTextField suppPhoneTfield;
+	private static JTextField suppNameTfield;
+	private static JTextField suppAddressTfield;
+	private static JTextField suppPhoneTfield;
 
 	// Create Panel
 	public SupplierPanel()
@@ -124,8 +126,19 @@ public class SupplierPanel extends JPanel
 				fieldCheck = checkNotNull(suppNameTfield, suppAddressTfield, suppPhoneTfield);
 				if (fieldCheck == true)
 				{
-					updateDBTable(suppIDComboBox, suppNameTfield, suppAddressTfield, suppPhoneTfield);
-					JOptionPane.showMessageDialog(null, "Database has been updated.");
+					boolean phoneCheck;
+					phoneCheck = isPhoneFormatValid(suppPhoneTfield);
+					if (phoneCheck == true)
+					{
+						updateDBTable(suppIDComboBox, suppNameTfield, suppAddressTfield, suppPhoneTfield);
+						JOptionPane.showMessageDialog(null, "Database has been updated.");
+					}
+
+					else
+					{
+						JOptionPane.showMessageDialog(null,
+								"Phone number is invalid. Number must be in the format '123-456-7899'.");
+					}
 				}
 
 				else
@@ -191,7 +204,7 @@ public class SupplierPanel extends JPanel
 			// create Prepared Statement for inserting data into table
 			String query = "SELECT supplierName, supplierAddress, supplierPhone FROM supplier WHERE supplierID = ?";
 			PreparedStatement pstat = con.prepareStatement(query);
-			pstat.setString(1, selectedIDString); // THIS IS EXTREMELY VULNERABLE TO SQL INJECTIONS
+			pstat.setInt(1, Integer.parseInt(selectedIDString)); // set the parameter using setInt() method
 			ResultSet rs = pstat.executeQuery();
 
 			rs.next();
@@ -214,7 +227,9 @@ public class SupplierPanel extends JPanel
 			try
 			{
 				con.close();
-			} catch (Exception exception)
+			}
+
+			catch (Exception exception)
 			{
 				exception.printStackTrace();
 			}
@@ -258,7 +273,9 @@ public class SupplierPanel extends JPanel
 					pstmt.close();
 				if (con != null)
 					con.close();
-			} catch (SQLException sqlException)
+			}
+
+			catch (SQLException sqlException)
 			{
 				sqlException.printStackTrace();
 			}
@@ -281,6 +298,31 @@ public class SupplierPanel extends JPanel
 		else
 		{
 			return true;
+		}
+	}
+
+	public static boolean isPhoneFormatValid(JTextField suppPhoneTfield)
+	{
+		String regex = "^[0-9]{3}[-\\\\s]?[0-9]{3}[-\\\\s]?[0-9]{4}$"; // regular expression for phone numbers
+		Pattern phoneCheckPattern = Pattern.compile(regex);
+		String currentPhone = suppPhoneTfield.getText();
+		if ((currentPhone == null || currentPhone.isEmpty()))
+		{
+			return false;
+		}
+
+		else
+		{
+			Matcher phoneMatch = phoneCheckPattern.matcher(currentPhone);
+			if (phoneMatch.matches())
+			{
+				return true;
+			}
+
+			else
+			{
+				return false;
+			}
 		}
 	}
 }
