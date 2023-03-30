@@ -1,6 +1,5 @@
 package java_project_2023;
 
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
@@ -9,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTable;
 
@@ -16,6 +17,7 @@ import javax.swing.JComboBox;
 
 import net.proteanit.sql.DbUtils;
 import javax.swing.JScrollPane;
+import javax.swing.JRadioButton;
 
 public class InvoicePanel extends JPanel
 {
@@ -23,33 +25,12 @@ public class InvoicePanel extends JPanel
 	// Declare variables
 	private static final long serialVersionUID = 1L;
 
-	// Launch
-	public static void main(String[] args)
-	{
-		EventQueue.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				try
-				{
-					InvoicePanel frame = new InvoicePanel();
-					frame.setVisible(true);
-				}
-
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	/**
 	 * Create the frame.
 	 */
 	public InvoicePanel()
 	{
-		setLayout(new MigLayout("", "[][109px][]", "[23px][20px][23px][grow][]"));
+		setLayout(new MigLayout("", "[][109px][]", "[23px][20px][][23px][][172.00,grow][][]"));
 
 		JButton addCustomerButton = new JButton("Add Customer");
 		addCustomerButton.addActionListener(new ActionListener()
@@ -97,14 +78,14 @@ public class InvoicePanel extends JPanel
 		add(updateSupplierButton, "cell 2 0");
 
 		JLabel invIDLabel = new JLabel("Invoice ID:");
-		add(invIDLabel, "cell 0 1");
+		add(invIDLabel, "cell 0 2");
 
 		JComboBox<String> invIDComboBox = new JComboBox<String>();
 		getInvIDs(invIDComboBox);
-		add(invIDComboBox, "cell 1 1,growx");
+		add(invIDComboBox, "cell 1 2,growx");
 
 		JScrollPane scrollPane = new JScrollPane();
-		add(scrollPane, "cell 0 3 3 1,grow");
+		add(scrollPane, "cell 0 5 3 1,grow");
 
 		JTable table = new JTable();
 		scrollPane.setViewportView(table);
@@ -117,17 +98,29 @@ public class InvoicePanel extends JPanel
 				populateTable(invIDComboBox, table);
 			}
 		});
-		add(getInvButton, "cell 0 2");
+		add(getInvButton, "cell 0 4,growx");
 
-		JButton invConfirmButton = new JButton("Confirm");
+		JRadioButton invConfirmRadioButton = new JRadioButton("Confirm?");
+		add(invConfirmRadioButton, "cell 0 6");
+
+		JButton invConfirmButton = new JButton("Received");
 		invConfirmButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				invoiceReceived(invIDComboBox);
+				if (invConfirmRadioButton.isSelected())
+				{
+					invoiceReceived(invIDComboBox);
+					JOptionPane.showMessageDialog(null, "Invoice has been received.");
+				}
+
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Invoice must be confirmed for receival.");
+				}
 			}
 		});
-		add(invConfirmButton, "cell 0 4");
+		add(invConfirmButton, "cell 0 7,growx");
 
 	}
 

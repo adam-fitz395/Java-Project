@@ -1,6 +1,5 @@
 package java_project_2023;
 
-import java.awt.EventQueue;
 import java.sql.*;
 
 import javax.swing.JFrame;
@@ -24,27 +23,6 @@ public class CustomerPanel extends JPanel
 	private static JTextField custSurnameTfield;
 	private static JTextField custDOBTfield;
 
-	// Launch
-	public static void main(String[] args)
-	{
-		EventQueue.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				try
-				{
-					CustomerPanel frame = new CustomerPanel();
-					frame.setVisible(true);
-				}
-
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	// Create the Panel
 	public CustomerPanel()
 	{
@@ -62,7 +40,7 @@ public class CustomerPanel extends JPanel
 				mainFrame.repaint();
 			}
 		});
-		setLayout(new MigLayout("", "[61px][][]", "[23px][20px][20px][][20px]"));
+		setLayout(new MigLayout("", "[61px][][]", "[23px][20px][20px][][][20px]"));
 		add(addCustomerButton, "cell 0 0,growx,aligny top");
 
 		JButton receiveInvButton = new JButton("Receive Invoice");
@@ -94,27 +72,16 @@ public class CustomerPanel extends JPanel
 			}
 		});
 		add(updateSupplierButton, "cell 2 0");
-
-		JLabel custNameLabel = new JLabel("Name:");
-		add(custNameLabel, "cell 0 1");
-
-		custNameTfield = new JTextField();
-		add(custNameTfield, "cell 1 1");
-		custNameTfield.setColumns(10);
-
-		JLabel custSurnameLabel = new JLabel("Surname:");
-		add(custSurnameLabel, "cell 0 2");
-
-		custSurnameTfield = new JTextField();
-		add(custSurnameTfield, "cell 1 2");
-		custSurnameTfield.setColumns(10);
-
-		JLabel custDOBLabel = new JLabel("DOB:");
-		add(custDOBLabel, "cell 0 3");
-
-		custDOBTfield = new JTextField();
-		add(custDOBTfield, "cell 1 3");
-		custDOBTfield.setColumns(10);
+		
+				JLabel custNameLabel = new JLabel("Name:");
+				add(custNameLabel, "cell 0 2");
+				
+						custNameTfield = new JTextField();
+						add(custNameTfield, "cell 1 2,growx");
+						custNameTfield.setColumns(10);
+		
+				JLabel custSurnameLabel = new JLabel("Surname:");
+				add(custSurnameLabel, "cell 0 3");
 
 		JButton addButton = new JButton("Add");
 		addButton.addActionListener(new ActionListener()
@@ -143,7 +110,18 @@ public class CustomerPanel extends JPanel
 				}
 			}
 		});
-		add(addButton, "cell 0 4");
+				
+						custSurnameTfield = new JTextField();
+						add(custSurnameTfield, "cell 1 3,growx");
+						custSurnameTfield.setColumns(10);
+		
+				JLabel custDOBLabel = new JLabel("DOB:");
+				add(custDOBLabel, "cell 0 4");
+		
+				custDOBTfield = new JTextField();
+				add(custDOBTfield, "cell 1 4,growx");
+				custDOBTfield.setColumns(10);
+		add(addButton, "cell 0 5");
 
 	}
 
@@ -155,7 +133,7 @@ public class CustomerPanel extends JPanel
 		// Test first name
 		String name = custNameTfield.getText();
 		String surname = custSurnameTfield.getText();
-		if ((name == null || name.isEmpty() || surname == null || surname.isEmpty()))
+		if (name == null || name.isEmpty() || surname == null || surname.isEmpty())
 		{
 			return false;
 		}
@@ -239,7 +217,9 @@ public class CustomerPanel extends JPanel
 			{
 				pstat.close();
 				con.close();
-			} catch (Exception exception)
+			} 
+			
+			catch (Exception exception)
 			{
 				exception.printStackTrace();
 			}
