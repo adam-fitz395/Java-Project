@@ -9,11 +9,11 @@ public class Driver
 	{
 		JFrame mainFrame = new JFrame("Admin Menu");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		MainPanel mainPanel = new MainPanel();
 		mainFrame.getContentPane().add(mainPanel);
-		
-		mainFrame.setSize(500,500);
+
+		mainFrame.setSize(500, 500);
 		mainFrame.setVisible(true);
 	}
 

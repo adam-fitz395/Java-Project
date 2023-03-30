@@ -16,11 +16,11 @@ public class MainPanel extends JPanel
 
 	public MainPanel()
 	{
-		
+
 		JButton addCustomerButton = new JButton("Add Customer");
-		addCustomerButton.addActionListener(new ActionListener() 
+		addCustomerButton.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent e) 
+			public void actionPerformed(ActionEvent e)
 			{
 				CustomerPanel customerPanel = new CustomerPanel();
 				JFrame mainFrame = (JFrame) getTopLevelAncestor();
@@ -32,11 +32,11 @@ public class MainPanel extends JPanel
 		});
 		setLayout(new MigLayout("", "[118px][130px][130px]", "[23px]"));
 		add(addCustomerButton, "cell 0 0,growx,aligny top");
-		
+
 		JButton receiveInvButton = new JButton("Receive Invoice");
-		receiveInvButton.addActionListener(new ActionListener() 
+		receiveInvButton.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent e) 
+			public void actionPerformed(ActionEvent e)
 			{
 				InvoicePanel invoicePanel = new InvoicePanel();
 				JFrame mainFrame = (JFrame) getTopLevelAncestor();
@@ -47,11 +47,11 @@ public class MainPanel extends JPanel
 			}
 		});
 		add(receiveInvButton, "cell 1 0,growx,aligny top");
-		
+
 		JButton updateSupplierButton = new JButton("Update Supplier");
-		updateSupplierButton.addActionListener(new ActionListener() 
+		updateSupplierButton.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent e) 
+			public void actionPerformed(ActionEvent e)
 			{
 				SupplierPanel supplierPanel = new SupplierPanel();
 				JFrame mainFrame = (JFrame) getTopLevelAncestor();
